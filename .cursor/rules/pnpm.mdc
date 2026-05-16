@@ -1,0 +1,18 @@
+---
+description: Use pnpm for JavaScript package management in this monorepo-style repo
+alwaysApply: true
+---
+
+# Package manager
+
+Use **pnpm** for dependency installs, script execution, and CLI tooling in this repository (`pnpm install`, `pnpm add`, `pnpm remove`, `pnpm exec`, `pnpm dlx`, `pnpm run`). Prefer `pnpm` over npm or yarn unless an external tool explicitly requires otherwise.
+
+The React app lives under **`frontend/`**. Run app-specific commands from that directory, for example:
+
+- `cd frontend && pnpm install`
+- `cd frontend && pnpm dev`
+- `cd frontend && pnpm build`
+
+The **`backend/`** directory is reserved for future server work; use pnpm there as well once a `package.json` exists.
+
+Do not add or commit **`package-lock.json`** or **`yarn.lock`** for packages managed with pnpm; keep **`pnpm-lock.yaml`** as the lockfile source of truth where applicable.

@@ -1,0 +1,19 @@
+---
+description: Prefer Tailwind CSS for all styling in the frontend
+alwaysApply: true
+---
+
+# Tailwind CSS
+
+Use **Tailwind CSS** as the default styling system for the **`frontend/`** React app.
+
+## Rules
+
+- Prefer **utility classes** (`className="..."`) for layout, spacing, typography, colors, borders, shadows, states (`hover:`, `focus:`, `dark:`, etc.), and responsive behavior (`sm:`, `md:`, …).
+- Use **`clsx`** + **`tailwind-merge`** (or a small **`cn()`** helper built from them, e.g. after shadcn init) when merging conditional classes.
+- Reach for **`@apply` in CSS only sparingly**—for example shared complex patterns repeated many times, or unavoidable third-party overrides—not as the primary styling layer.
+- Keep **`index.css`** for Tailwind entry (`@import "tailwindcss"` or project baseline), **CSS variables** tied to the design system, and rare global resets only—avoid growing large hand-written component stylesheets.
+- When adding or changing UI, **extend the Tailwind theme** (`tailwind.config` / CSS theme) for tokens (colors, fonts, radii) instead of hard-coding one-off hex values in arbitrary properties when those values should be reused.
+- If a file already uses plain CSS for legacy reasons, **migrate touched sections to Tailwind** when making substantive edits, unless the change is trivial.
+
+Do **not** introduce new styling approaches (CSS modules, styled-components, emotion, etc.) unless the user explicitly asks for them.
