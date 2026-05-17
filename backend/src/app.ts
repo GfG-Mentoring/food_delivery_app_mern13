@@ -1,5 +1,3 @@
-import path from 'node:path';
-
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
@@ -23,6 +21,20 @@ function corsOriginsProduction(): false | string[] {
   }
   const list = commaList.split(',').map((s) => s.trim()).filter(Boolean);
   return list.length > 0 ? list : false;
+}
+
+/**
+ * Vercel Services mounts this app under `routePrefix` (see vercel.json). Local/tests omit the prefix.
+ */
+function apiRoutePrefix(): string {
+  const explicit = process.env.API_ROUTE_PREFIX?.trim();
+  if (explicit !== undefined && explicit !== '') {
+    return explicit.replace(/\/$/, '');
+  }
+  if (process.env.VERCEL === '1') {
+    return '/_/backend';
+  }
+  return '';
 }
 
 export function createApp(): express.Express {
@@ -64,27 +76,16 @@ export function createApp(): express.Express {
     }),
   );
 
-  app.use('/health', healthRoutes);
-  app.use('/auth', authRoutes);
-  app.use('/restaurants', restaurantsRoutes);
+  const api = express.Router();
+  api.use('/health', healthRoutes);
+  api.use('/auth', authRoutes);
+  api.use('/restaurants', restaurantsRoutes);
 
-  /**
-   * Non-file routes (e.g. /r/:id) are not served from public/; CDN misses fall through to this
-   * function with only API paths routed above.
-   */
-  if (onVercel) {
-    const indexHtml = path.join(process.cwd(), 'public', 'index.html');
-    app.use((req, res, next) => {
-      if (req.method !== 'GET' && req.method !== 'HEAD') return next();
-      if (
-        req.path.startsWith('/health') ||
-        req.path.startsWith('/auth') ||
-        req.path.startsWith('/restaurants')
-      ) {
-        return next();
-      }
-      res.sendFile(indexHtml, (err) => (err ? next(err) : undefined));
-    });
+  const prefix = apiRoutePrefix();
+  if (prefix !== '') {
+    app.use(prefix, api);
+  } else {
+    app.use(api);
   }
 
   app.use(errorHandler);

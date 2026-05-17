@@ -2,7 +2,7 @@ import type { Restaurant } from '../features/restaurants/types.ts'
 
 const rawBase =
   import.meta.env.VITE_API_URL ??
-  (import.meta.env.PROD ? '' : 'http://localhost:3000')
+  (import.meta.env.PROD ? '/_/backend' : 'http://localhost:3000')
 const API_BASE = rawBase.replace(/\/$/, '')
 
 export class ApiError extends Error {

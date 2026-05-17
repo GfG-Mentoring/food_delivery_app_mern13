@@ -1,12 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "installCommand": "corepack enable pnpm && pnpm install --prefix frontend && pnpm install --prefix backend",
-  "buildCommand": "pnpm --prefix frontend exec vite build && pnpm --prefix backend run build",
-  "functions": {
-    "index.ts": {
-      "maxDuration": 30,
-      "memory": 1024
+  "experimentalServices": {
+    "frontend": {
+      "entrypoint": "frontend",
+      "routePrefix": "/",
+      "framework": "vite"
+    },
+    "backend": {
+      "entrypoint": "backend",
+      "routePrefix": "/_/backend",
+      "framework": "express"
     }
   }
 }

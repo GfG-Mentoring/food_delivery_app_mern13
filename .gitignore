@@ -18,7 +18,7 @@ node_modules
 dist
 dist-ssr
 
-# Vite build output when deploying Express + SPA on Vercel
+# Frontend build output when targeting backend/public locally
 backend/public
 *.local
 
