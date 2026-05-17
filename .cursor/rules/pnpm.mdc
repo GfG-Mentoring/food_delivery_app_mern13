@@ -7,12 +7,19 @@ alwaysApply: true
 
 Use **pnpm** for dependency installs, script execution, and CLI tooling in this repository (`pnpm install`, `pnpm add`, `pnpm remove`, `pnpm exec`, `pnpm dlx`, `pnpm run`). Prefer `pnpm` over npm or yarn unless an external tool explicitly requires otherwise.
 
-The React app lives under **`frontend/`**. Run app-specific commands from that directory, for example:
+The React app lives under **`frontend/`** and the API under **`backend/`**. This repo uses a **pnpm workspace** at the repository root: a single **`pnpm-lock.yaml`** at the root must stay in sync with **`package.json`** in **`frontend/`** and **`backend/`**.
 
-- `cd frontend && pnpm install`
-- `cd frontend && pnpm dev`
-- `cd frontend && pnpm build`
+Install once from the repo root (recommended):
 
-The **`backend/`** directory is reserved for future server work; use pnpm there as well once a `package.json` exists.
+- `pnpm install`
+
+Run app-specific commands with **`--filter`** from the root, for example:
+
+- `pnpm --filter food-delivery-frontend dev`
+- `pnpm --filter food-delivery-frontend build`
+- `pnpm --filter food-delivery-backend dev`
+- `pnpm --filter food-delivery-backend test`
+
+You can still `cd frontend` or `cd backend` and run **`pnpm install`** / **`pnpm dev`** there; prefer root install so the shared lockfile stays correct.
 
 Do not add or commit **`package-lock.json`** or **`yarn.lock`** for packages managed with pnpm; keep **`pnpm-lock.yaml`** as the lockfile source of truth where applicable.
