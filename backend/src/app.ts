@@ -26,15 +26,13 @@ function corsOriginsProduction(): false | string[] {
 }
 
 /**
- * Vercel Services mounts this app under `routePrefix` (see vercel.json). Local/tests omit the prefix.
+ * Vercel Services routes `/_/backend/*` to this app but strips `/_/backend` before
+ * invoking Express, so routes must be mounted at `/`. Locally and in tests there is no prefix.
  */
 function apiRoutePrefix(): string {
   const explicit = process.env.API_ROUTE_PREFIX?.trim();
   if (explicit !== undefined && explicit !== '') {
     return explicit.replace(/\/$/, '');
-  }
-  if (process.env.VERCEL === '1') {
-    return '/_/backend';
   }
   return '';
 }
