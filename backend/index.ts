@@ -1,3 +1,5 @@
+/// <reference path="./src/types/express.d.ts" />
+
 import 'dotenv/config';
 
 import { createApp } from './src/app.js';
