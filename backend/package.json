@@ -7,10 +7,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "seed": "pnpm run build && node dist/scripts/seed-restaurants.js"
+    "seed": "pnpm run build && node dist/src/scripts/seed-restaurants.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.19.0",
     "morgan": "^1.10.1",
+    "serverless-http": "^4.0.0",
     "winston": "^3.18.3"
   },
   "devDependencies": {

@@ -17,6 +17,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+
+# Vite build output when deploying Express + SPA on Vercel
+backend/public
 *.local
 
 # Env files (secrets)
