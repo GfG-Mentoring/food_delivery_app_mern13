@@ -60,12 +60,15 @@ export function createApp(): express.Express {
     }
   }
 
-  /** Vercel runs this build as a Function; defer DB connection to first request after cold start */
+  /** Vercel: connect Mongo only for routes that need it so /health and API root can respond if DB is slow or misconfigured. */
   const onVercel = process.env.VERCEL === '1';
-  if (onVercel) {
-    app.use((_req, _res, next) => {
-      void ensureDbConnected(env.mongodbUri).then(next).catch(next);
-    });
+
+  function connectDbMiddleware(
+    _req: express.Request,
+    _res: express.Response,
+    next: express.NextFunction,
+  ): void {
+    void ensureDbConnected(env.mongodbUri).then(next).catch(next);
   }
 
   app.use(
@@ -79,9 +82,20 @@ export function createApp(): express.Express {
   );
 
   const api = express.Router();
+
+  api.get('/', (_req, res) => {
+    res.json({ ok: true, service: 'food-delivery-api' });
+  });
+
   api.use('/health', healthRoutes);
-  api.use('/auth', authRoutes);
-  api.use('/restaurants', restaurantsRoutes);
+
+  if (onVercel) {
+    api.use('/auth', connectDbMiddleware, authRoutes);
+    api.use('/restaurants', connectDbMiddleware, restaurantsRoutes);
+  } else {
+    api.use('/auth', authRoutes);
+    api.use('/restaurants', restaurantsRoutes);
+  }
 
   const prefix = apiRoutePrefix();
   if (prefix !== '') {
